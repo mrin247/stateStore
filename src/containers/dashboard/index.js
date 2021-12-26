@@ -12,7 +12,7 @@ import {
 import React from "react";
 import { Layout } from "../../components/layout";
 import { Datalist } from "../../components/List";
-import { SideBar } from "../../components/sidebar/indes";
+import { SideBar } from "../../components/sidebar";
 
 /**
  * @author

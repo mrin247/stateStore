@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { makeStyles } from "@mui/styles";
@@ -52,6 +53,8 @@ const useStyles = makeStyles({
 });
 
 export const SideBar = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const styles = useStyles();
   return (
     <Drawer
@@ -106,7 +109,8 @@ export const SideBar = (props) => {
         <ListItem
           button
           classes={{ root: styles.root, selected: styles.selected }}
-          selected={true}
+          selected={location.pathname === "/" ? true : false}
+          onClick={() => navigate("/")}
         >
           <ListItemIcon>
             <DashboardIcon sx={{ color: "whitesmoke" }} />
@@ -117,6 +121,8 @@ export const SideBar = (props) => {
         <ListItem
           button
           classes={{ root: styles.root, selected: styles.selected }}
+          selected={location.pathname === "/customers" ? true : false}
+          onClick={() => navigate("/customers")}
         >
           <ListItemIcon>
             <PeopleIcon sx={{ color: "whitesmoke" }} />
@@ -127,6 +133,8 @@ export const SideBar = (props) => {
         <ListItem
           button
           classes={{ root: styles.root, selected: styles.selected }}
+          selected={location.pathname === "/products" ? true : false}
+          onClick={() => navigate("/products")}
         >
           <ListItemIcon>
             <InventoryIcon sx={{ color: "whitesmoke" }} />
@@ -137,6 +145,8 @@ export const SideBar = (props) => {
         <ListItem
           button
           classes={{ root: styles.root, selected: styles.selected }}
+          selected={location.pathname === "/orders" ? true : false}
+          onClick={() => navigate("/orders")}
         >
           <ListItemIcon>
             <LocalShippingIcon sx={{ color: "whitesmoke" }} />
@@ -149,6 +159,7 @@ export const SideBar = (props) => {
         <ListItem
           button
           classes={{ root: styles.root, selected: styles.selected }}
+          onClick={() => navigate("/signin")}
         >
           <ListItemIcon>
             <LogoutIcon sx={{ color: "red", fontWeight: 900 }} />

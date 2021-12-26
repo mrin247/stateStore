@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import { SideBar } from "../sidebar/indes";
+import { SideBar } from "../sidebar";
 
 /**
  * @author
