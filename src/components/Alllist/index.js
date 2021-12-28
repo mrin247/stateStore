@@ -23,6 +23,7 @@ import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import { orange, purple } from "@mui/material/colors";
 import { useLocation } from "react-router-dom";
+import { ProductModal } from "../ProductModal";
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -254,6 +255,10 @@ export const Alllist = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const location = useLocation();
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -281,12 +286,12 @@ export const Alllist = (props) => {
               variant="contained"
               fullWidth
               startIcon={<AddIcon />}
-              onClick={() => {
-                alert("open modal");
-              }}
+              onClick={handleOpen}
+              onClose={handleClose}
             >
               Create Product
             </ColorButton>
+            <ProductModal open={open} onClose={handleClose}/>
           </Grid>
         ) : null}
       </Grid>
