@@ -142,6 +142,7 @@ export const ProductModal = (props) => {
                   //defaultValue="Default Value"
                 />
               </Grid>
+              
               <Grid item xs={6} >
                 <FormControlLabel
                   control={<Checkbox defaultChecked />}

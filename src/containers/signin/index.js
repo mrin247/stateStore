@@ -1,4 +1,6 @@
-import * as React from "react";
+import React, { useState } from "react";
+//import { useDispatch } from 'react'
+import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -7,6 +9,7 @@ import {
   Container,
   CssBaseline,
   Divider,
+  FormControl,
   IconButton,
   Input,
   InputAdornment,
@@ -18,18 +21,15 @@ import Link from "@mui/material/Link";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 // Icons & Images
-import PersonIcon from "@mui/icons-material/Person";
-import HomeIcon from "@mui/icons-material/Home";
-import PhoneIcon from "@mui/icons-material/Phone";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
+
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import PinterestIcon from "@mui/icons-material/Pinterest";
 import MailIcon from "@mui/icons-material/Mail";
 import HttpsIcon from "@mui/icons-material/Https";
 import signinImage from "../../images/signin.jpg";
+import { signin } from "../../actions/authActions";
+import { Navigate } from "react-router-dom";
 
 const Root = styled("div")(({ theme }) => ({
   width: "100%",
@@ -45,6 +45,10 @@ const Image = styled("img")(({ theme }) => ({
 }));
 
 export const Signin = (props) => {
+  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const [values, setValues] = React.useState({
     amount: "",
     password: "",
@@ -67,6 +71,21 @@ export const Signin = (props) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const user = {
+    email,
+    password: values.password,
+  };
+
+  const login = (e) => {
+    e.preventDefault();
+    dispatch(signin(user));
+  };
+
+  if (auth.authenticate) {
+    return <Navigate to={`/`} />;
+  }
+
   return (
     <>
       <CssBaseline />
@@ -97,6 +116,8 @@ export const Signin = (props) => {
                   id="input-with-sx"
                   label="Email"
                   variant="standard"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Box>
 
@@ -151,6 +172,7 @@ export const Signin = (props) => {
                     fullWidth
                     variant="contained"
                     sx={{ bgcolor: "#002d68" }}
+                    onClick={login}
                   >
                     Sign in
                   </Button>
