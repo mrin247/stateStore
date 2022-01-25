@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -24,6 +26,7 @@ import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import HttpsIcon from "@mui/icons-material/Https";
 import signupImage from "../../images/signup.jpg";
+import { signup } from "../../actions/authActions";
 
 const Root = styled("div")(({ theme }) => ({
   width: "100%",
@@ -39,16 +42,38 @@ const Image = styled("img")(({ theme }) => ({
 }));
 
 export const Signup = (props) => {
+  const [firstName, setFirstName] = React.useState();
+  const [lastName, setLastName] = React.useState();
+  const [address, setAddress] = React.useState();
+  const [state, setState] = React.useState();
+  const [pin, setPin] = React.useState();
+  const [email, setEmail] = React.useState();
+  const [contactNumber, setContactNumber] = React.useState();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const [values, setValues] = React.useState({
     amount: "",
-    password: "",
+    password: null,
     weight: "",
     weightRange: "",
     showPassword: false,
   });
 
+  const [confirmValues, setConfirmValues] = React.useState({
+    amount: "",
+    confirmPassword: null,
+    weight: "",
+    weightRange: "",
+    showConfirmPassword: false,
+  });
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const confirmHandleChange = (prop) => (event) => {
+    setConfirmValues({ ...confirmValues, [prop]: event.target.value });
   };
 
   const handleClickShowPassword = () => {
@@ -58,9 +83,53 @@ export const Signup = (props) => {
     });
   };
 
+  const handleClickShowConfirmPassword = () => {
+    setConfirmValues({
+      ...confirmValues,
+      showConfirmPassword: !confirmValues.showConfirmPassword,
+    });
+  };
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const user = {
+    firstName,
+    lastName,
+    email,
+    password: values.password,
+    contactNumber,
+    address,
+    state,
+    pin,
+  };
+
+  const createAccount = (e) => {
+    e.preventDefault();
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !values.password ||
+      !confirmValues.confirmPassword ||
+      !contactNumber ||
+      !address ||
+      !state ||
+      !pin
+    ) {
+      alert("Please fill all");
+    } else if (values.password !== confirmValues.confirmPassword) {
+      alert("Passwords shpould be same");
+    } else {
+      dispatch(signup(user));
+    }
+  };
+
+  if (auth.authenticate) {
+    return <Navigate to={`/`} />;
+  }
+
   return (
     <>
       <CssBaseline />
@@ -90,6 +159,7 @@ export const Signup = (props) => {
                       label="First Name"
                       variant="standard"
                       color="secondary"
+                      onChange={(e) => setFirstName(e.target.value)}
                     />
                   </Box>
                 </Grid>
@@ -104,6 +174,7 @@ export const Signup = (props) => {
                       label="Last Name"
                       color="secondary"
                       variant="standard"
+                      onChange={(e) => setLastName(e.target.value)}
                     />
                   </Box>
                 </Grid>
@@ -117,6 +188,7 @@ export const Signup = (props) => {
                   label="Mobile Number"
                   variant="standard"
                   color="secondary"
+                  onChange={(e) => setContactNumber(e.target.value)}
                 />
               </Box>
 
@@ -128,6 +200,7 @@ export const Signup = (props) => {
                   label="Address"
                   variant="standard"
                   color="secondary"
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </Box>
 
@@ -142,6 +215,7 @@ export const Signup = (props) => {
                       label="State"
                       color="secondary"
                       variant="standard"
+                      onChange={(e) => setState(e.target.value)}
                     />
                   </Box>
                 </Grid>
@@ -156,6 +230,7 @@ export const Signup = (props) => {
                       label="Pin"
                       color="secondary"
                       variant="standard"
+                      onChange={(e) => setPin(e.target.value)}
                     />
                   </Box>
                 </Grid>
@@ -168,6 +243,7 @@ export const Signup = (props) => {
                   label="Email"
                   variant="standard"
                   color="secondary"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Box>
 
@@ -181,6 +257,7 @@ export const Signup = (props) => {
                   type={values.showPassword ? "text" : "password"}
                   value={values.password}
                   onChange={handleChange("password")}
+                  autoComplete="off"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -207,18 +284,19 @@ export const Signup = (props) => {
                   placeholder="Confirm Password"
                   color="secondary"
                   id="standard-adornment-password"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange("password")}
+                  autoComplete="off"
+                  type={confirmValues.showConfirmPassword ? "text" : "Password"}
+                  value={confirmValues.confirmPassword}
+                  onChange={confirmHandleChange("confirmPassword")}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         color="secondary"
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        onClick={handleClickShowConfirmPassword}
                         onMouseDown={handleMouseDownPassword}
                       >
-                        {values.showPassword ? (
+                        {confirmValues.showConfirmPassword ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />
@@ -231,7 +309,12 @@ export const Signup = (props) => {
 
               <Root>
                 <Box pt={2} mr={10} ml={10} mt={1}>
-                  <Button fullWidth variant="contained" color="secondary">
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    onClick={createAccount}
+                  >
                     Create Account
                   </Button>
                 </Box>

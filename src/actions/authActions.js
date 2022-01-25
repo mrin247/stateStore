@@ -1,6 +1,39 @@
 import { authConstants } from "./constants";
 import axios from "../utils/axios";
 
+export const signup = (user) => {
+  return async (dispatch) => {
+    let res;
+    try {
+      dispatch({ type: authConstants.SIGNUP_REQUEST });
+      res = await axios.post(`/store/auth/signup`, user);
+      if (res.status === 201) {
+        dispatch({ type: authConstants.SIGNUP_SUCCESS });
+        const { token, user } = res.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        dispatch({
+          type: authConstants.LOGIN_SUCCESS,
+          payload: {
+            token,
+            user,
+          },
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({ type: authConstants.SIGNUP_FAILURE, payload: { error } });
+      }
+    } catch (error) {
+      console.log(error);
+      const { data } = error.response;
+      dispatch({
+        type: authConstants.SIGNUP_FAILURE,
+        payload: { error: data.error },
+      });
+    }
+  };
+};
+
 export const signin = (user) => {
   console.log(user);
 
