@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
@@ -25,6 +26,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { signout } from "../../actions/authActions";
 
 const drawerWidth = 240;
 
@@ -56,6 +58,14 @@ export const SideBar = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const styles = useStyles();
+  const dispatch= useDispatch();
+
+  const logout=(e)=>{
+    e.preventDefault();
+    dispatch(signout());
+    navigate("/signin");
+  }
+
   return (
     <Drawer
       classes={{ paper: styles.paper }}
@@ -159,7 +169,7 @@ export const SideBar = (props) => {
         <ListItem
           button
           classes={{ root: styles.root, selected: styles.selected }}
-          onClick={() => navigate("/signin")}
+          onClick={logout}
         >
           <ListItemIcon>
             <LogoutIcon sx={{ color: "red", fontWeight: 900 }} />
