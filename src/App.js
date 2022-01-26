@@ -9,6 +9,8 @@ import { Signup } from "./containers/signup";
 import PrivateRoute from "./components/HOC/privateRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { isUserLoggedIn } from "./actions/authActions";
+import { ForgotPassword } from "./containers/forgotPassword";
+import { ResetPassword } from "./containers/resetPassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,6 +39,8 @@ function App() {
 
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/signin" element={<Signin />} />
+          <Route exact path="/forgot-password" element={<ForgotPassword />} />
+          <Route exact path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </Fragment>
     </Router>

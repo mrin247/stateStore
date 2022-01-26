@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -42,6 +42,7 @@ const Image = styled("img")(({ theme }) => ({
 }));
 
 export const Signup = (props) => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = React.useState();
   const [lastName, setLastName] = React.useState();
   const [address, setAddress] = React.useState();
@@ -323,7 +324,7 @@ export const Signup = (props) => {
                   <Button
                     variant="contained"
                     color="secondary"
-                    href="http://localhost:4000/signin"
+                    onClick={()=>navigate("/signin")}
                   >
                     Login
                   </Button>

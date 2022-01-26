@@ -58,13 +58,14 @@ export const SideBar = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const styles = useStyles();
-  const dispatch= useDispatch();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
 
-  const logout=(e)=>{
+  const logout = (e) => {
     e.preventDefault();
     dispatch(signout());
     navigate("/signin");
-  }
+  };
 
   return (
     <Drawer
@@ -94,7 +95,7 @@ export const SideBar = (props) => {
           <Button sx={{ mr: 4, color: "whitesmoke" }}>
             <ManageAccountsIcon />
             <Typography pl={1} variant="h6" noWrap component="div">
-              Account
+              {auth.user.firstName}
             </Typography>
           </Button>
         </Toolbar>

@@ -27,7 +27,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import MailIcon from "@mui/icons-material/Mail";
 import HttpsIcon from "@mui/icons-material/Https";
-import signinImage from "../../images/signin.jpg";
+import forgotPassword from "../../images/forgot-password.jpg";
 import { signin } from "../../actions/authActions";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -44,7 +44,7 @@ const Image = styled("img")(({ theme }) => ({
   height: "100%",
 }));
 
-export const Signin = (props) => {
+export const ForgotPassword = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
@@ -105,6 +105,14 @@ export const Signin = (props) => {
         >
           <Grid container spacing={1} ml={1}>
             <Grid item xs={6}>
+              <Box sx={{ display: "flex", alignItems: "flex-end" }} margin={5}>
+                <Typography
+                  sx={{ fontSize: "16px", color: "#002d68", fontWeight: 600 }}
+                  variant="subtitle1"
+                >
+                  Type your full Email address to get Reset password link ...
+                </Typography>
+              </Box>
               <Box
                 sx={{ display: "flex", alignItems: "flex-end" }}
                 pt={2}
@@ -122,52 +130,6 @@ export const Signin = (props) => {
                 />
               </Box>
 
-              <Box
-                sx={{ display: "flex", alignItems: "flex-end" }}
-                pt={3}
-                mt={5}
-                ml={5}
-                mr={5}
-              >
-                <HttpsIcon sx={{ color: "#002d68", mr: 1, my: 0.5 }} />
-                <Input
-                  fullWidth
-                  placeholder="Password"
-                  color="primary"
-                  id="standard-adornment-password"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange("password")}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        sx={{ color: "#002d68" }}
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {values.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </Box>
-              <Box ml={9} mt={2} sx={{ fontSize: "14px" }}>
-                <span>Forgot Password ? </span>
-                <Link
-                  component="button"
-                  onClick={() => navigate("/forgot-password")}
-                  underline="hover"
-                  sx={{ color: "#002d68", fontWeight: 400 }}
-                >
-                  Reset password here
-                </Link>
-              </Box>
-
               <Root>
                 <Box pt={2} mr={15} ml={15} mt={1} pb={3}>
                   <Button
@@ -176,7 +138,7 @@ export const Signin = (props) => {
                     sx={{ bgcolor: "#002d68" }}
                     onClick={login}
                   >
-                    Sign in
+                    Forgot Password
                   </Button>
                 </Box>
                 <Divider>OR</Divider>
@@ -193,7 +155,7 @@ export const Signin = (props) => {
                 </Box>
                 <Box
                   sx={{ display: "flex", justifyContent: "space-around" }}
-                  mb={12}
+                  mb={15}
                 >
                   <Button sx={{ color: "#002d68", fontWeight: 600 }}>
                     <GoogleIcon />
@@ -219,7 +181,7 @@ export const Signin = (props) => {
             </Grid>
 
             <Grid item xs={6}>
-              <Image src={signinImage} />
+              <Image src={forgotPassword} />
             </Grid>
           </Grid>
         </Box>

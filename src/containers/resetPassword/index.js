@@ -13,6 +13,7 @@ import {
   IconButton,
   Input,
   InputAdornment,
+  Stack,
   Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -24,10 +25,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import MailIcon from "@mui/icons-material/Mail";
 import HttpsIcon from "@mui/icons-material/Https";
-import signinImage from "../../images/signin.jpg";
+import resetPassword from "../../images/reset-password.jpg";
+import account from "../../images/account.png";
 import { signin } from "../../actions/authActions";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -44,7 +47,7 @@ const Image = styled("img")(({ theme }) => ({
   height: "100%",
 }));
 
-export const Signin = (props) => {
+export const ResetPassword = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
@@ -52,20 +55,39 @@ export const Signin = (props) => {
 
   const [values, setValues] = React.useState({
     amount: "",
-    password: "",
+    password: null,
     weight: "",
     weightRange: "",
     showPassword: false,
+  });
+
+  const [confirmValues, setConfirmValues] = React.useState({
+    amount: "",
+    confirmPassword: null,
+    weight: "",
+    weightRange: "",
+    showConfirmPassword: false,
   });
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  const confirmHandleChange = (prop) => (event) => {
+    setConfirmValues({ ...confirmValues, [prop]: event.target.value });
+  };
+
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
+    });
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setConfirmValues({
+      ...confirmValues,
+      showConfirmPassword: !confirmValues.showConfirmPassword,
     });
   };
 
@@ -105,27 +127,19 @@ export const Signin = (props) => {
         >
           <Grid container spacing={1} ml={1}>
             <Grid item xs={6}>
-              <Box
-                sx={{ display: "flex", alignItems: "flex-end" }}
-                pt={2}
-                margin={5}
-              >
-                <MailIcon sx={{ color: "#002d68", mr: 1, my: 0.5 }} />
-                <TextField
-                  fullWidth
-                  color="primary"
-                  id="input-with-sx"
-                  label="Email"
-                  variant="standard"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Box>
+              <Stack spacing={2}>
+                <Box sx={{ display: "flex", justifyContent: "space-around" }} mt={2}>
+                  <AccountCircleOutlinedIcon sx={{ fontSize: 90, color:"rgb(102 185 255)" }}/>
+                </Box>
+                <Typography variant="h4" align="center">
+                  Account
+                </Typography>
+              </Stack>
 
               <Box
                 sx={{ display: "flex", alignItems: "flex-end" }}
                 pt={3}
-                mt={5}
+                mt={3}
                 ml={5}
                 mr={5}
               >
@@ -156,16 +170,41 @@ export const Signin = (props) => {
                   }
                 />
               </Box>
-              <Box ml={9} mt={2} sx={{ fontSize: "14px" }}>
-                <span>Forgot Password ? </span>
-                <Link
-                  component="button"
-                  onClick={() => navigate("/forgot-password")}
-                  underline="hover"
-                  sx={{ color: "#002d68", fontWeight: 400 }}
-                >
-                  Reset password here
-                </Link>
+
+              <Box
+                sx={{ display: "flex", alignItems: "flex-end" }}
+                pt={3}
+                mt={3}
+                ml={5}
+                mr={5}
+              >
+                <HttpsIcon sx={{ color: "#002d68", mr: 1, my: 0.5 }} />
+                <Input
+                  fullWidth
+                  placeholder="Confirm Password"
+                  sx={{ color: "#002d68" }}
+                  id="standard-adornment-password"
+                  autoComplete="off"
+                  type={confirmValues.showConfirmPassword ? "text" : "Password"}
+                  value={confirmValues.confirmPassword}
+                  onChange={confirmHandleChange("confirmPassword")}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        sx={{ color: "#002d68" }}
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {confirmValues.showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
               </Box>
 
               <Root>
@@ -176,7 +215,7 @@ export const Signin = (props) => {
                     sx={{ bgcolor: "#002d68" }}
                     onClick={login}
                   >
-                    Sign in
+                    Reset Password
                   </Button>
                 </Box>
                 <Divider>OR</Divider>
@@ -193,7 +232,7 @@ export const Signin = (props) => {
                 </Box>
                 <Box
                   sx={{ display: "flex", justifyContent: "space-around" }}
-                  mb={12}
+                  mb={5}
                 >
                   <Button sx={{ color: "#002d68", fontWeight: 600 }}>
                     <GoogleIcon />
@@ -206,20 +245,10 @@ export const Signin = (props) => {
                   </Button>
                 </Box>
               </Root>
-              <Box ml={3}>
-                <span>Don't have an account ? </span>
-                <Link
-                  onClick={() => navigate("/signup")}
-                  underline="hover"
-                  sx={{ color: "#002d68", fontWeight: 600 }}
-                >
-                  Create an account here
-                </Link>
-              </Box>
             </Grid>
 
             <Grid item xs={6}>
-              <Image src={signinImage} />
+              <Image src={resetPassword} />
             </Grid>
           </Grid>
         </Box>
