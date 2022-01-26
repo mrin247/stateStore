@@ -29,10 +29,15 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import TwitterIcon from "@mui/icons-material/Twitter";
 import MailIcon from "@mui/icons-material/Mail";
 import HttpsIcon from "@mui/icons-material/Https";
-import resetPassword from "../../images/reset-password.jpg";
+import resetPasswordIMG from "../../images/reset-password.jpg";
 import account from "../../images/account.png";
-import { signin } from "../../actions/authActions";
-import { Navigate, useNavigate } from "react-router-dom";
+import { resetPassword, signin } from "../../actions/authActions";
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 const Root = styled("div")(({ theme }) => ({
   width: "100%",
@@ -49,6 +54,7 @@ const Image = styled("img")(({ theme }) => ({
 
 export const ResetPassword = (props) => {
   const navigate = useNavigate();
+  const { resetToken } = useParams();
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
@@ -95,14 +101,21 @@ export const ResetPassword = (props) => {
     event.preventDefault();
   };
 
-  const user = {
-    email,
+  //console.log("token", resetToken);
+  const credentials = {
+    token: resetToken,
     password: values.password,
   };
 
-  const login = (e) => {
+  const savePassword = (e) => {
     e.preventDefault();
-    dispatch(signin(user));
+    if (values.password !== confirmValues.confirmPassword) {
+      setValues({ ...values, password: null });
+      setConfirmValues({ ...confirmValues, password: null });
+    } else {
+      dispatch(resetPassword(credentials));
+      navigate("/signin");
+    }
   };
 
   if (auth.authenticate) {
@@ -128,8 +141,13 @@ export const ResetPassword = (props) => {
           <Grid container spacing={1} ml={1}>
             <Grid item xs={6}>
               <Stack spacing={2}>
-                <Box sx={{ display: "flex", justifyContent: "space-around" }} mt={2}>
-                  <AccountCircleOutlinedIcon sx={{ fontSize: 90, color:"rgb(102 185 255)" }}/>
+                <Box
+                  sx={{ display: "flex", justifyContent: "space-around" }}
+                  mt={2}
+                >
+                  <AccountCircleOutlinedIcon
+                    sx={{ fontSize: 90, color: "rgb(102 185 255)" }}
+                  />
                 </Box>
                 <Typography variant="h4" align="center">
                   Account
@@ -213,9 +231,9 @@ export const ResetPassword = (props) => {
                     fullWidth
                     variant="contained"
                     sx={{ bgcolor: "#002d68" }}
-                    onClick={login}
+                    onClick={savePassword}
                   >
-                    Reset Password
+                    Save Password
                   </Button>
                 </Box>
                 <Divider>OR</Divider>
@@ -248,7 +266,7 @@ export const ResetPassword = (props) => {
             </Grid>
 
             <Grid item xs={6}>
-              <Image src={resetPassword} />
+              <Image src={resetPasswordIMG} />
             </Grid>
           </Grid>
         </Box>

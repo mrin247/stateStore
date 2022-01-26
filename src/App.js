@@ -40,7 +40,7 @@ function App() {
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/signin" element={<Signin />} />
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
-          <Route exact path="/reset-password" element={<ResetPassword />} />
+          <Route exact path="/reset-password/:resetToken" element={<ResetPassword />} />
         </Routes>
       </Fragment>
     </Router>

@@ -43,7 +43,7 @@ export default (state = initState, action) => {
       };
       break;
 
-      case authConstants.FORGOT_REQUEST:
+    case authConstants.FORGOT_REQUEST:
       state = {
         ...state,
       };
@@ -51,10 +51,28 @@ export default (state = initState, action) => {
     case authConstants.FORGOT_SUCCESS:
       state = {
         ...state,
-        message:"Email sent successfully"
+        message: "Email sent successfully",
       };
       break;
     case authConstants.FORGOT_FAILURE:
+      state = {
+        ...state,
+        error: action.payload.error,
+      };
+      break;
+
+    case authConstants.RESET_REQUEST:
+      state = {
+        ...state,
+      };
+      break;
+    case authConstants.RESET_SUCCESS:
+      state = {
+        ...state,
+        message: "Password Reset Successfully",
+      };
+      break;
+    case authConstants.RESET_FAILURE:
       state = {
         ...state,
         error: action.payload.error,

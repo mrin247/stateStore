@@ -43,7 +43,6 @@ export const signin = (user) => {
       ...user,
     });
 
-    console.log(res.status);
     if (res.status === 200) {
       const { token, user } = res.data;
       localStorage.setItem("token", token);
@@ -76,7 +75,7 @@ export const forgotPassword = (account) => {
       if (res.status === 200) {
         dispatch({ type: authConstants.FORGOT_SUCCESS });
       } else {
-        console.log("res",res);
+        console.log("res", res);
         const { error } = res.data;
         dispatch({ type: authConstants.FORGOT_FAILURE, payload: { error } });
       }
@@ -87,6 +86,27 @@ export const forgotPassword = (account) => {
         type: authConstants.FORGOT_FAILURE,
         payload: { error: data.error },
       });
+    }
+  };
+};
+
+export const resetPassword = (credentials) => {
+  return async (dispatch) => {
+    let res;
+    const token = credentials.token;
+    try {
+      dispatch({ type: authConstants.RESET_REQUEST });
+      res = await axios.put(`/store/auth/reset-password/${token}`,credentials);
+      if (res.status === 200) {
+        dispatch({ type: authConstants.RESET_SUCCESS });
+      } else {
+        const { error } = res.data;
+        dispatch({ type: authConstants.RESET_FAILURE, payload: { error } });
+
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: authConstants.RESET_FAILURE, payload: { error } });
     }
   };
 };
