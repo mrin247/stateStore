@@ -57,9 +57,35 @@ export const signin = (user) => {
       });
     } else {
       console.log("mrin");
+
       dispatch({
         type: authConstants.LOGIN_FAILURE,
         payload: { error: res.data.error },
+      });
+    }
+  };
+};
+
+export const forgotPassword = (account) => {
+  return async (dispatch) => {
+    let res;
+    try {
+      dispatch({ type: authConstants.FORGOT_REQUEST });
+      res = await axios.post("/store/auth/forgot-password", account);
+
+      if (res.status === 200) {
+        dispatch({ type: authConstants.FORGOT_SUCCESS });
+      } else {
+        console.log("res",res);
+        const { error } = res.data;
+        dispatch({ type: authConstants.FORGOT_FAILURE, payload: { error } });
+      }
+    } catch (error) {
+      console.log(error);
+      const { data } = error.response;
+      dispatch({
+        type: authConstants.FORGOT_FAILURE,
+        payload: { error: data.error },
       });
     }
   };

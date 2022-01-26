@@ -27,8 +27,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import MailIcon from "@mui/icons-material/Mail";
 import HttpsIcon from "@mui/icons-material/Https";
-import forgotPassword from "../../images/forgot-password.jpg";
-import { signin } from "../../actions/authActions";
+import forgotPasswordImage from "../../images/forgot-password.jpg";
+import { forgotPassword, signin } from "../../actions/authActions";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Root = styled("div")(({ theme }) => ({
@@ -50,37 +50,14 @@ export const ForgotPassword = (props) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
-  const [values, setValues] = React.useState({
-    amount: "",
-    password: "",
-    weight: "",
-    weightRange: "",
-    showPassword: false,
-  });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+  const account = {
+    email
   };
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const user = {
-    email,
-    password: values.password,
-  };
-
-  const login = (e) => {
+  const resetPassword = (e) => {
     e.preventDefault();
-    dispatch(signin(user));
+    dispatch(forgotPassword(account));
+    setEmail("");
   };
 
   if (auth.authenticate) {
@@ -136,9 +113,9 @@ export const ForgotPassword = (props) => {
                     fullWidth
                     variant="contained"
                     sx={{ bgcolor: "#002d68" }}
-                    onClick={login}
+                    onClick={resetPassword}
                   >
-                    Forgot Password
+                    Reset Password
                   </Button>
                 </Box>
                 <Divider>OR</Divider>
@@ -181,7 +158,7 @@ export const ForgotPassword = (props) => {
             </Grid>
 
             <Grid item xs={6}>
-              <Image src={forgotPassword} />
+              <Image src={forgotPasswordImage} />
             </Grid>
           </Grid>
         </Box>
