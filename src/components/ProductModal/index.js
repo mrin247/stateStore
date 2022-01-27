@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -17,6 +18,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { createProduct } from "../../actions/productActions";
 
 const style = {
   position: "absolute",
@@ -29,7 +31,7 @@ const style = {
   color: "black",
   boxShadow: 24,
   p: 4,
-  borderRadius:"10px"
+  borderRadius: "10px",
 };
 
 const Input = styled("input")({
@@ -38,29 +40,66 @@ const Input = styled("input")({
 
 const categories = [
   {
-    value: "Food",
-    label: "Food",
+    value: "Home Needs",
+    label: "Home Needs",
   },
   {
-    value: "Food 1",
-    label: "Food 1",
+    value: "Grocery",
+    label: "Grocery",
   },
   {
-    value: "Food 2",
-    label: "Food 2",
+    label: "Fashion",
+    value: "Fashion",
   },
   {
-    value: "Food 3",
-    label: "Food 3",
+    value: "Books & Magazines",
+    label: "Books & Magazines",
+  },
+  {
+    value: "Handlooms",
+    label: "Handlooms",
+  },
+  {
+    value: "Lifestyle",
+    label: "Lifestyle",
+  },
+  {
+    value: "Puja Samagrhi",
+    label: "Puja Samagrhi",
+  },
+  {
+    value: "Toys & More",
+    label: "Toys & More",
   },
 ];
 
 export const ProductModal = (props) => {
-  const [category, setCategory] = React.useState("Food");
+  const dispatch = useDispatch();
+  const [category, setCategory] = React.useState("");
+  const [name, setName] = React.useState();
+  const [price, setPrice] = React.useState();
+  const [quantity, setQuantity] = React.useState();
+  const [description, setDescription] = React.useState();
+  const [inStock, setInStock] = React.useState(true);
 
-  const handleChange = (event) => {
-    setCategory(event.target.value);
+  const product = {
+    name,
+    category,
+    price,
+    quantity,
+    description,
+    inStock,
   };
+
+  const saveProduct = (e) => {
+    e.preventDefault();
+    if (!name || !price || !category || !quantity || !description) {
+      alert("Please fill all fields");
+    } else {
+      dispatch(createProduct(product));
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -78,6 +117,7 @@ export const ProductModal = (props) => {
                   label="Name"
                   variant="outlined"
                   fullWidth
+                  onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -86,6 +126,7 @@ export const ProductModal = (props) => {
                   label="Quantity"
                   variant="outlined"
                   fullWidth
+                  onChange={(e) => setQuantity(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -93,8 +134,8 @@ export const ProductModal = (props) => {
                   id="outlined-select-currency"
                   select
                   label="Select Category"
-                  onChange={handleChange}
                   fullWidth
+                  onChange={(e) => setCategory(e.target.value)}
                 >
                   {categories.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -110,6 +151,7 @@ export const ProductModal = (props) => {
                   label="Price"
                   variant="outlined"
                   fullWidth
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -139,28 +181,31 @@ export const ProductModal = (props) => {
                   label="Description"
                   multiline
                   rows={4}
-                  //defaultValue="Default Value"
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </Grid>
-              
-              <Grid item xs={6} >
+
+              <Grid item xs={6}>
                 <FormControlLabel
-                  control={<Checkbox defaultChecked />}
+                  control={
+                    <Checkbox
+                      onChange={(e) => setInStock(e.target.checked)}
+                      checked={inStock}
+                    />
+                  }
                   label="Item in Stock"
                 />
               </Grid>
 
               <Grid item xs={3}>
-                
-                  <Button variant="contained">Contained</Button>
-                  
-                
+                <Button variant="contained" onClick={props.onClose}>
+                  Discard
+                </Button>
               </Grid>
-              <Grid item xs={3} >
-                
-                  <Button variant="contained" fullWidth>Contained</Button>
-                  
-                
+              <Grid item xs={3}>
+                <Button variant="contained" fullWidth onClick={saveProduct}>
+                  Create
+                </Button>
               </Grid>
             </Grid>
           </Box>
