@@ -26,3 +26,31 @@ export const createProduct = (product) => {
     }
   };
 };
+
+export const allProduct = () => {
+  return async (dispatch) => {
+    let res;
+    try {
+      dispatch({ type: porductConstants.ALL_PRODUCT_REQUEST });
+      res = await axios.get("/store/product");
+      if (res.status === 200) {
+        dispatch({
+          type: porductConstants.ALL_PRODUCT_SUCCESS,
+          payload: { products: res.data.products },
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: porductConstants.ALL_PRODUCT_FAILURE,
+          payload: { error },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: porductConstants.ALL_PRODUCT_FAILURE,
+        payload: { error },
+      });
+    }
+  };
+};

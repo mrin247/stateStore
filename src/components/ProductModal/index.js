@@ -18,7 +18,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import { createProduct } from "../../actions/productActions";
+import { allProduct, createProduct } from "../../actions/productActions";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -75,6 +76,7 @@ const categories = [
 
 export const ProductModal = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [category, setCategory] = React.useState("");
   const [name, setName] = React.useState();
   const [price, setPrice] = React.useState();
@@ -97,6 +99,8 @@ export const ProductModal = (props) => {
       alert("Please fill all fields");
     } else {
       dispatch(createProduct(product));
+      props.onClose();
+      window.location.reload();
     }
   };
 
