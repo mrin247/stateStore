@@ -11,16 +11,18 @@ import { Layout } from "../../components/layout";
  **/
 
 export const Product = (props) => {
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
-//   const { productId } = useParams();
-//   const product = useSelector((state) => state.product.productDetail);
-//   React.useEffect(() => {
-//     dispatch(productDetail(productId));
-//   }, []);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { productId } = useParams();
+  const product = useSelector((state) => state.product.productDetail);
+  React.useEffect(() => {
+    dispatch(productDetail(productId));
+    return () => {};
+  }, []);
+
   return (
     <Layout>
-      <EditProduct  />
+      <EditProduct product={product} />
     </Layout>
   );
 };

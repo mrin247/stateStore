@@ -79,20 +79,30 @@ const categories = [
 ];
 
 export const EditProduct = (props) => {
+  //console.log(props.product);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [category, setCategory] = React.useState("");
-  const [name, setName] = React.useState("");
+  const [name, setName] = React.useState();
   const [price, setPrice] = React.useState("");
   const [quantity, setQuantity] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [inStock, setInStock] = React.useState("");
   const { productId } = useParams();
-  const product = useSelector((state) => state.product.productDetail);
+  const product = props.product;
 
+  React.useEffect(() => {
+    if (product !== null) {
+      setName(product.name);
+      setPrice(product.price);
+      setQuantity(product.quantity);
+      setDescription(product.description);
+      setCategory(product.category);
+      setInStock(product.inStock);
+    }
+  }, [product]);
 
-  
   //const product= products ? products.productDetail: null;
 
   //   const product = {
@@ -130,13 +140,16 @@ export const EditProduct = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={8}>
             <TextField
-              id="outlined-basic"
+              id="outlined-info"
               label="Name"
               variant="outlined"
               fullWidth
               value={name}
               color="info"
               onChange={(e) => setName(e.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </Grid>
           <Grid item xs={4}>
@@ -157,7 +170,7 @@ export const EditProduct = (props) => {
               select
               label="Select Category"
               fullWidth
-              defaultValue={category}
+              value={category}
               color="info"
               onChange={(e) => setCategory(e.target.value)}
             >
