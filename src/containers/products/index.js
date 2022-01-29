@@ -47,7 +47,7 @@ export const Products = (props) => {
   ];
   return (
     <Layout>
-      <Alllist title="All Products" rows={products} columns={columns} />
+      <Alllist title="All Products" rows={products} columns={columns}/>
     </Layout>
   );
 };

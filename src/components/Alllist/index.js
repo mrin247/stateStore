@@ -22,10 +22,11 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import { orange, purple } from "@mui/material/colors";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ProductModal } from "../ProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import { allProduct } from "../../actions/productActions";
+import { EditProductModal } from "../EditProduct";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -72,12 +73,14 @@ export const Alllist = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const location = useLocation();
+  const navigate = useNavigate();
   const rows = props.rows;
   const columns = props.columns;
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -111,7 +114,7 @@ export const Alllist = (props) => {
             >
               Create Product
             </ColorButton>
-            <ProductModal open={open} onClose={handleClose} />
+            <ProductModal open={open} onClose={() => handleClose()} />
           </Grid>
         ) : null}
       </Grid>
@@ -141,38 +144,44 @@ export const Alllist = (props) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <StyledTableRow
-                    hover
-                    button
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.code}
-                    sx={{ cursor: "pointer" }}
-                    onClick={() => {
-                      alert(row.name);
-                    }}
-                  >
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      const tooltipTitle =
-                        location.pathname === "/products"
-                          ? "click to edit"
-                          : location.pathname === "/orders"
-                          ? "Change Status"
-                          : column.id;
-                      return (
-                        <BootstrapTooltip
-                          title={tooltipTitle}
-                          placement="right"
-                          arrow
-                        >
-                          <StyledTableCell key={column.id} align={column.align}>
-                            {column.format ? column.format(value) : value}
-                          </StyledTableCell>
-                        </BootstrapTooltip>
-                      );
-                    })}
-                  </StyledTableRow>
+                  <>
+                    <StyledTableRow
+                      hover
+                      button
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.code}
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => navigate(`${row._id}`)}
+                      //onClose={handleCloseEdit}
+                    >
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        const tooltipTitle =
+                          location.pathname === "/products"
+                            ? "click to edit"
+                            : location.pathname === "/orders"
+                            ? "Change Status"
+                            : column.id;
+                        return (
+                          <BootstrapTooltip
+                            title={tooltipTitle}
+                            placement="right"
+                            arrow
+                          >
+                            <StyledTableCell
+                              hover
+                              button
+                              key={column.id}
+                              align={column.align}
+                            >
+                              {column.format ? column.format(value) : value}
+                            </StyledTableCell>
+                          </BootstrapTooltip>
+                        );
+                      })}
+                    </StyledTableRow>
+                  </>
                 );
               })}
           </TableBody>

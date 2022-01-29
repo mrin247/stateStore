@@ -54,3 +54,32 @@ export const allProduct = () => {
     }
   };
 };
+
+export const productDetail = (productId) => {
+  return async (dispatch) => {
+    let res;
+    try {
+      dispatch({ type: porductConstants.PRODUCT_DETAIL_REQUEST });
+      res = await axios.get(`/product/${productId}`);
+      if (res.status === 200) {
+        dispatch({
+          type: porductConstants.PRODUCT_DETAIL_SUCCESS,
+          payload: { product: res.data.product },
+        });
+      } else {
+        console.log(res);
+        const { error } = res.data;
+        dispatch({
+          type: porductConstants.PRODUCT_DETAIL_FAILURE,
+          payload: { error },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: porductConstants.PRODUCT_DETAIL_FAILURE,
+        payload: { error },
+      });
+    }
+  };
+};

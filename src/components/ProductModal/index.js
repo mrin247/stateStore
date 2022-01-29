@@ -104,6 +104,12 @@ export const ProductModal = (props) => {
     }
   };
 
+  const discard = () => {
+    setName("");
+    props.onClose();
+    window.location.reload();
+  };
+
   return (
     <div>
       <Modal
@@ -202,7 +208,7 @@ export const ProductModal = (props) => {
               </Grid>
 
               <Grid item xs={3}>
-                <Button variant="contained" onClick={props.onClose}>
+                <Button variant="contained" onClick={() => discard()}>
                   Discard
                 </Button>
               </Grid>
