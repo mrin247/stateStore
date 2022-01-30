@@ -22,6 +22,7 @@ import {
   allProduct,
   createProduct,
   productDetail,
+  updateProduct,
 } from "../../actions/productActions";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
@@ -103,26 +104,26 @@ export const EditProduct = (props) => {
     }
   }, [product]);
 
-  //const product= products ? products.productDetail: null;
-
-  //   const product = {
-  //     name,
-  //     category,
-  //     price,
-  //     quantity,
-  //     description,
-  //     inStock,
-  //   };
+  const updatedProduct = {
+    _id: productId,
+    name,
+    category,
+    price,
+    quantity,
+    description,
+    inStock,
+  };
 
   const saveProduct = (e) => {
-    // e.preventDefault();
-    // if (!name || !price || !category || !quantity || !description) {
-    //   alert("Please fill all fields");
-    // } else {
-    //   dispatch(createProduct(product));
-    //   props.onClose();
-    //   window.location.reload();
-    // }
+    e.preventDefault();
+    if (!name || !price || !category || !quantity || !description) {
+      alert("Please fill all fields");
+    } else {
+      dispatch(updateProduct(updatedProduct));
+      navigate("/products");
+      // props.onClose();
+      window.location.reload();
+    }
   };
   const deleteProduct = (e) => {};
   console.log("Open EDITS");
@@ -260,7 +261,7 @@ export const EditProduct = (props) => {
               onClick={saveProduct}
               color="success"
             >
-              Save
+              Update
             </Button>
           </Grid>
         </Grid>
