@@ -85,7 +85,7 @@ export const productDetail = (productId) => {
 };
 
 export const updateProduct = (product) => {
-  console.log(product);
+  //console.log(product);
   return async (dispatch) => {
     let res;
     const productId = product._id;
@@ -101,6 +101,34 @@ export const updateProduct = (product) => {
         const { error } = res.data;
         dispatch({
           type: porductConstants.UPDATE_PRODUCT_FAILURE,
+          payload: { error: error },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: porductConstants.UPDATE_PRODUCT_FAILURE,
+        payload: { error: error },
+      });
+    }
+  };
+};
+
+export const deleteProduct = (productId) => {
+  //console.log(product);
+  return async (dispatch) => {
+    let res;
+    try {
+      dispatch({ type: porductConstants.DELETE_PRODUCT_REQUEST });
+      res = await axios.delete(`store/product/${productId}`);
+      if (res.status === 200) {
+        dispatch({
+          type: porductConstants.DELETE_PRODUCT_SUCCESS,
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: porductConstants.DELETE_PRODUCT_FAILURE,
           payload: { error: error },
         });
       }

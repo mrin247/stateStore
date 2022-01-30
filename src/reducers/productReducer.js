@@ -82,6 +82,27 @@ export default (state = initState, action) => {
         loading: false,
       };
       break;
+
+    case porductConstants.DELETE_PRODUCT_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case porductConstants.DELETE_PRODUCT_SUCCESS:
+      state = {
+        ...state,
+        productDetail: null,
+        loading: false,
+      };
+      break;
+    case porductConstants.DELETE_PRODUCT_FAILURE:
+      state = {
+        ...state,
+        error: action.payload.error,
+        loading: false,
+      };
+      break;
   }
   return state;
 };

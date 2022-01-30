@@ -21,6 +21,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import {
   allProduct,
   createProduct,
+  deleteProduct,
   productDetail,
   updateProduct,
 } from "../../actions/productActions";
@@ -121,11 +122,16 @@ export const EditProduct = (props) => {
     } else {
       dispatch(updateProduct(updatedProduct));
       navigate("/products");
-      // props.onClose();
       window.location.reload();
     }
   };
-  const deleteProduct = (e) => {};
+
+  const delProduct = (e) => {
+    e.preventDefault();
+    dispatch(deleteProduct(productId));
+    navigate("/products");
+    window.location.reload();
+  };
   console.log("Open EDITS");
 
   return (
@@ -248,7 +254,7 @@ export const EditProduct = (props) => {
             <Button
               variant="contained"
               fullWidth
-              onClick={deleteProduct}
+              onClick={delProduct}
               color="error"
             >
               Delete
