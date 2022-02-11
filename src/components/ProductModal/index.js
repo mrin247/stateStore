@@ -78,11 +78,12 @@ export const ProductModal = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [category, setCategory] = React.useState("");
-  const [name, setName] = React.useState();
-  const [price, setPrice] = React.useState();
-  const [quantity, setQuantity] = React.useState();
-  const [description, setDescription] = React.useState();
+  const [name, setName] = React.useState("");
+  const [price, setPrice] = React.useState("");
+  const [quantity, setQuantity] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [inStock, setInStock] = React.useState(true);
+  const [productPictures, setProductPictures] = React.useState([]);
 
   const product = {
     name,
@@ -98,9 +99,25 @@ export const ProductModal = (props) => {
     if (!name || !price || !category || !quantity || !description) {
       alert("Please fill all fields");
     } else {
-      dispatch(createProduct(product));
-      props.onClose();
-      window.location.reload();
+      const form = new FormData();
+      form.append("name", name);
+      form.append("category", category);
+      form.append("price", price);
+      form.append("quantity", quantity);
+      form.append("description", description);
+      form.append("inStock", inStock);
+      //form.append("name",name);
+      //const product = { content: form };
+      //console.log(form.values());
+
+      for (let pic of productPictures) {
+        form.append("productPhotos", pic);
+      }
+
+      console.log(productPictures);
+      dispatch(createProduct(form));
+      //props.onClose();
+      //window.location.reload();
     }
   };
 
@@ -108,6 +125,14 @@ export const ProductModal = (props) => {
     setName("");
     props.onClose();
     window.location.reload();
+  };
+
+  const handleProductPictures = (e) => {
+    let images = [];
+    for (let i = 0; i < e.target.files.length; i++) {
+      images.push(e.target.files[i]);
+    }
+    setProductPictures([...productPictures,...images]);
   };
 
   return (
@@ -171,6 +196,7 @@ export const ProductModal = (props) => {
                     id="contained-button-file"
                     multiple
                     type="file"
+                    onChange={handleProductPictures}
                   />
                   <Button
                     variant="contained"
