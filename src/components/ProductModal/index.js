@@ -11,8 +11,10 @@ import {
   Fade,
   FormControlLabel,
   Grid,
+  IconButton,
   MenuItem,
   Paper,
+  Stack,
   TextField,
   Toolbar,
 } from "@mui/material";
@@ -85,15 +87,6 @@ export const ProductModal = (props) => {
   const [inStock, setInStock] = React.useState(true);
   const [productPictures, setProductPictures] = React.useState([]);
 
-  const product = {
-    name,
-    category,
-    price,
-    quantity,
-    description,
-    inStock,
-  };
-
   const saveProduct = (e) => {
     e.preventDefault();
     if (!name || !price || !category || !quantity || !description) {
@@ -115,26 +108,28 @@ export const ProductModal = (props) => {
       }
 
       console.log(productPictures);
-      dispatch(createProduct(form));
-      //props.onClose();
+      dispatch(createProduct(form)).then(() => props.onClose());
+      //;
       //window.location.reload();
     }
   };
 
   const discard = () => {
     setName("");
+    setCategory("");
+    setPrice("");
+    setQuantity("");
+    setDescription("");
+    setInStock(true);
+    setProductPictures([]);
     props.onClose();
-    window.location.reload();
   };
 
   const handleProductPictures = (e) => {
-    let images = [];
-    for (let i = 0; i < e.target.files.length; i++) {
-      images.push(e.target.files[i]);
-    }
-    setProductPictures([...productPictures,...images]);
+    setProductPictures([...productPictures, ...e.target.files]);
   };
 
+  console.log(productPictures);
   return (
     <div>
       <Modal
@@ -180,7 +175,7 @@ export const ProductModal = (props) => {
                 </TextField>
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid item xs={11}>
                 <TextField
                   id="outlined-basic"
                   label="Price"
@@ -189,26 +184,52 @@ export const ProductModal = (props) => {
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={4}>
-                <label htmlFor="contained-button-file">
-                  <Input
-                    accept="image/*"
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                    onChange={handleProductPictures}
-                  />
-                  <Button
-                    variant="contained"
-                    component="span"
-                    endIcon={<PhotoCamera />}
-                    fullWidth
-                    sx={{ height: "100%" }}
-                  >
-                    Upload
-                  </Button>
-                </label>
+              {/* <Grid item xs={7} sx={{ display: "flex" }}>
+                
+                  {productPictures.map((image) => (
+                    <Typography sx={{ fontSize: "10px" }}>
+                      {image.name}
+                    </Typography>
+                  ))}
+                
+              </Grid> */}
+              <Grid item xs={1}>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <label htmlFor="icon-button-file">
+                    <Input
+                      accept="image/*"
+                      id="icon-button-file"
+                      multiple
+                      type="file"
+                      onChange={handleProductPictures}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      component="span"
+                    >
+                      <PhotoCamera sx={{ fontSize: "40px" }} />
+                    </IconButton>
+                  </label>
+                </Box>
               </Grid>
+              {productPictures.length > 0 ? (
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    {productPictures.map((image) => (
+                      <Grid item xs={2}>
+                        <Button
+                          variant="text"
+                          size="small"
+                          sx={{ textTransform: "none", color: "rgb(0 30 60)" }}
+                        >
+                          {image.name}
+                        </Button>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Grid>
+              ) : null}
 
               <Grid item xs={12}>
                 <TextField

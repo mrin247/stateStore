@@ -11,8 +11,10 @@ import {
   Fade,
   FormControlLabel,
   Grid,
+  IconButton,
   MenuItem,
   Paper,
+  Stack,
   TextField,
   Toolbar,
 } from "@mui/material";
@@ -44,6 +46,10 @@ const style = {
 const Input = styled("input")({
   display: "none",
 });
+const Image = styled("img")(({ theme }) => ({
+  width: "150px",
+  height: "80px",
+}));
 
 const categories = [
   {
@@ -91,6 +97,7 @@ export const EditProduct = (props) => {
   const [quantity, setQuantity] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [inStock, setInStock] = React.useState("");
+  const [productPictures, setProductPictures] = React.useState([]);
   const { productId } = useParams();
   const product = props.product;
 
@@ -102,17 +109,12 @@ export const EditProduct = (props) => {
       setDescription(product.description);
       setCategory(product.category);
       setInStock(product.inStock);
+      setProductPictures(product.productPhotos);
     }
   }, [product]);
 
-  const updatedProduct = {
-    _id: productId,
-    name,
-    category,
-    price,
-    quantity,
-    description,
-    inStock,
+  const handleProductPictures = (e) => {
+    setProductPictures([...productPictures, ...e.target.files]);
   };
 
   const saveProduct = (e) => {
@@ -120,7 +122,17 @@ export const EditProduct = (props) => {
     if (!name || !price || !category || !quantity || !description) {
       alert("Please fill all fields");
     } else {
-      dispatch(updateProduct(updatedProduct));
+      const form = new FormData();
+      form.append("name", name);
+      form.append("category", category);
+      form.append("price", price);
+      form.append("quantity", quantity);
+      form.append("description", description);
+      form.append("inStock", inStock);
+      for (let pic of productPictures) {
+        form.append("productPhotos", pic);
+      }
+      dispatch(updateProduct(form, productId));
       navigate("/products");
       window.location.reload();
     }
@@ -128,11 +140,10 @@ export const EditProduct = (props) => {
 
   const delProduct = (e) => {
     e.preventDefault();
-    dispatch(deleteProduct(productId));
-    navigate("/products");
-    window.location.reload();
+    dispatch(deleteProduct(productId)).then(() => navigate("/products"));
   };
-  console.log("Open EDITS");
+
+  console.log(productPictures);
 
   return (
     <Container
@@ -189,7 +200,7 @@ export const EditProduct = (props) => {
             </TextField>
           </Grid>
 
-          <Grid item xs={8}>
+          <Grid item xs={11}>
             <TextField
               id="outlined-basic"
               label="Price"
@@ -200,24 +211,25 @@ export const EditProduct = (props) => {
               onChange={(e) => setPrice(e.target.value)}
             />
           </Grid>
-          <Grid item xs={4}>
-            <label htmlFor="contained-button-file">
-              <Input
-                accept="image/*"
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <Button
-                variant="contained"
-                component="span"
-                endIcon={<PhotoCamera />}
-                fullWidth
-                sx={{ height: "100%" }}
-              >
-                Upload
-              </Button>
-            </label>
+          <Grid item xs={1}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <label htmlFor="icon-button-file">
+                <Input
+                  accept="image/*"
+                  id="icon-button-file"
+                  multiple
+                  type="file"
+                  onChange={handleProductPictures}
+                />
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                >
+                  <PhotoCamera sx={{ fontSize: "40px" }} />
+                </IconButton>
+              </label>
+            </Box>
           </Grid>
 
           <Grid item xs={12}>
@@ -231,6 +243,20 @@ export const EditProduct = (props) => {
               onChange={(e) => setDescription(e.target.value)}
             />
           </Grid>
+
+          {productPictures && productPictures.length > 0 ? (
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{ justifyContent: "space-between" }}
+              >
+                {productPictures.map((image) => (
+                  <Image src={image.img} />
+                ))}
+              </Stack>
+            </Grid>
+          ) : null}
 
           <Grid item xs={6}>
             <FormControlLabel
