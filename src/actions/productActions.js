@@ -62,7 +62,7 @@ export const productDetail = (productId) => {
     let res;
     try {
       dispatch({ type: porductConstants.PRODUCT_DETAIL_REQUEST });
-      res = await axios.get(`/product/${productId}`);
+      res = await axios.get(`/store/product/${productId}`);
       if (res.status === 200) {
         dispatch({
           type: porductConstants.PRODUCT_DETAIL_SUCCESS,
@@ -86,7 +86,7 @@ export const productDetail = (productId) => {
   };
 };
 
-export const updateProduct = (product,productId) => {
+export const updateProduct = (product, productId) => {
   //console.log(product);
   return async (dispatch) => {
     let res;
