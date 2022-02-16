@@ -109,6 +109,13 @@ export const ProductModal = (props) => {
 
       console.log(productPictures);
       dispatch(createProduct(form)).then(() => props.onClose());
+      setName("");
+      setCategory("");
+      setPrice("");
+      setQuantity("");
+      setDescription("");
+      setInStock(true);
+      setProductPictures([]);
       //;
       //window.location.reload();
     }
