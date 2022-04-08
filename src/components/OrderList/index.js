@@ -10,7 +10,6 @@ import { Layout } from "../../components/layout";
 import {
   Box,
   Button,
-  Checkbox,
   Container,
   Grid,
   Tooltip,
@@ -27,6 +26,7 @@ import { ProductModal } from "../ProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import { allProduct } from "../../actions/productActions";
 import { EditProductModal } from "../EditProduct";
+import { OrderStatusDialoge } from "../OrderStatusDialoge";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -70,17 +70,31 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export const OrderList = (props) => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason !== "backdropClick") {
+      setOpen(false);
+    }
+  };
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const location = useLocation();
   const navigate = useNavigate();
+
   const rows = props.rows;
   const columns = props.columns;
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-  };
+
+  //const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -109,7 +123,7 @@ export const OrderList = (props) => {
               variant="contained"
               fullWidth
               startIcon={<AddIcon />}
-              onClick={handleOpen}
+              //onClick={handleOpen}
               onClose={handleClose}
             >
               Create Product
@@ -152,11 +166,9 @@ export const OrderList = (props) => {
                       tabIndex={-1}
                       key={row.code}
                       sx={{ cursor: "pointer" }}
-                      onClick={() => navigate(`${row._id}`)}
-                      //onClose={handleCloseEdit}
                     >
                       {columns.map((column) => {
-                        const value = row[column.id];
+                        const val = row[column.id];
                         const tooltipTitle =
                           location.pathname === "/products"
                             ? "click to edit"
@@ -175,7 +187,87 @@ export const OrderList = (props) => {
                               key={column.id}
                               align={column.align}
                             >
-                              {column.format ? column.format(value) : value}
+                              {column.id === "orderStatus" ? (
+                                <>
+                                  {val.map((v) =>
+                                    v.isCompleted ? (
+                                      <>
+                                        <Button
+                                          onClick={handleClickOpen}
+                                          variant="contained"
+                                          sx={{
+                                            color: "whitesmoke",
+                                            backgroundColor:
+                                              v.type === "delivered"
+                                                ? "green"
+                                                : v.type === "shipped"
+                                                ? "orange"
+                                                : v.type === "packed"
+                                                ? "violet"
+                                                : "blue",
+                                            "&:hover": {
+                                              backgroundColor:
+                                                v.type === "delivered"
+                                                  ? "green"
+                                                  : v.type === "shipped"
+                                                  ? "orange"
+                                                  : v.type === "packed"
+                                                  ? "violet"
+                                                  : "blue",
+                                            },
+                                          }}
+                                        >
+                                          {v.type}
+                                        </Button>
+                                        <OrderStatusDialoge
+                                          open={open}
+                                          handleClose={handleClose}
+                                          value={val}
+                                          status={v}
+                                          order={row}
+                                        />
+                                      </>
+                                    ) : null
+                                  )}
+                                </>
+                              ) : // <FormControl fullWidth>
+                              //   <Select
+                              //     labelId="demo-simple-select-label"
+                              //     id="demo-simple-select"
+                              //     value={age}
+                              //     onChange={handleChange}
+                              //     sx={{
+                              //       color: "whitesmoke",
+                              //       border: "1px solid whitesmoke",
+                              //       backgroundColor:
+                              //         age === 3
+                              //           ? "green"
+                              //           : age === 2
+                              //           ? "orange"
+                              //           : age === 1
+                              //           ? "violet"
+                              //           : "blue",
+                              //     }}
+                              //   >
+                              //     {
+                              //       //console.log(val)
+                              //       val.map((v,index) => (<MenuItem value={index}>
+                              //         {v.type}
+                              //       </MenuItem>)
+
+                              //       )
+                              //     }
+                              //     {/* <MenuItem value={1}>Ordered</MenuItem>
+                              //     <MenuItem value={2}>Packed</MenuItem>
+                              //     <MenuItem value={3}>Shipped</MenuItem>
+                              //     <MenuItem value={4}>Delivered</MenuItem> */}
+                              //   </Select>
+                              // </FormControl>
+                              column.format ? (
+                                column.format(val)
+                              ) : (
+                                val
+                              )}
                             </StyledTableCell>
                           </BootstrapTooltip>
                         );

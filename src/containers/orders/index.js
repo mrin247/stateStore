@@ -17,7 +17,6 @@ export const Orders = (props) => {
 
   //const orders= orderList? orderList.orders:null;
 
-  console.log(orderList);
 
   React.useEffect(() => {
     dispatch(getOrders());

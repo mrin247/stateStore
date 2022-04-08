@@ -20,7 +20,7 @@ export const Products = (props) => {
   }, []);
 
   const columns = [
-    { id: "_id", label: "Name", minWidth: 170 },
+    { id: "name", label: "Name", minWidth: 170 },
     { id: "price", label: "Price", minWidth: 100 },
     {
       id: "category",
