@@ -17,7 +17,6 @@ export const Orders = (props) => {
 
   //const orders= orderList? orderList.orders:null;
 
-
   React.useEffect(() => {
     dispatch(getOrders());
   }, []);
@@ -31,11 +30,11 @@ export const Orders = (props) => {
     },
     { id: "payablePrice", label: "Price", minWidth: 100 },
     {
-      id: "createdAt",
+      id: "orderStatus",
       label: "Ordered At",
       minWidth: 170,
       align: "right",
-      format: (value) => value.toLocaleString("en-US"),
+      format: (value) =>  Date(value).split("GMT")[0],
     },
     {
       id: "purchasedQty",
@@ -49,10 +48,6 @@ export const Orders = (props) => {
       label: "Order Status",
       minWidth: 170,
       align: "right",
-      format: (value) => {
-        if (value) return "In Stock";
-        else return "Out of Stock";
-      },
     },
   ];
   return (

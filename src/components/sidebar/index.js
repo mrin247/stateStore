@@ -129,7 +129,7 @@ export const SideBar = (props) => {
           <ListItemText primary="Dashboard" />
         </ListItem>
 
-        <ListItem
+        {/* <ListItem
           button
           classes={{ root: styles.root, selected: styles.selected }}
           selected={location.pathname === "/customers" ? true : false}
@@ -139,7 +139,7 @@ export const SideBar = (props) => {
             <PeopleIcon sx={{ color: "whitesmoke" }} />
           </ListItemIcon>
           <ListItemText primary="Customers" />
-        </ListItem>
+        </ListItem> */}
 
         <ListItem
           button

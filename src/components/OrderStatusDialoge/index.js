@@ -11,6 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { getOrders, updateOrder } from "../../actions/orderActions";
 
 /**
  * @author
@@ -22,14 +24,47 @@ export const OrderStatusDialoge = (props) => {
   const v = props.status;
   const type = v.type;
   const order = props.order;
+  console.log(order);
 
   const [status, setStatus] = React.useState(type);
+  const [lastIndex, setLastIndex] = React.useState(props.statusIndex);
+
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
+    const ind =
+      event.target.value === "delivered"
+        ? 3
+        : event.target.value === "shipped"
+        ? 2
+        : event.target.value === "packed"
+        ? 1
+        : 0;
     setStatus(event.target.value);
+    setLastIndex(ind);
   };
 
-  console.log(order);
+  const updateOrderStatus = () => {
+    val.map((v, index) => {
+      v.isCompleted =
+        v.type === status || index <= lastIndex ? true : v.isCompleted;
+      v.date = v.type === status || index <= lastIndex ? Date.now() : v.date;
+    });
+
+    const updatedOrder = {
+      productId: order.productId._id,
+      sellerId: order.sellerId,
+      payablePrice: order.payablePrice,
+      purchasedQty: order.purchasedQty,
+      orderId: order._id,
+      orderStatus: val,
+    };
+
+    console.log(updatedOrder);
+    dispatch(updateOrder(updatedOrder));
+    props.handleClose().then(setTimeout(dispatch(getOrders())), 3000);
+  };
+
   return (
     <Dialog disableEscapeKeyDown open={props.open} onClose={props.handleClose}>
       <DialogTitle>Change Order Status</DialogTitle>
@@ -48,9 +83,9 @@ export const OrderStatusDialoge = (props) => {
               <Typography> Price : {order.payablePrice}</Typography>
 
               <Box mt={3}>
-                <Typography> Created At : {order.createdAt}</Typography>
+                <Typography> Created At : {Date(order.orderStatus[0].date).split("GMT")[0]}</Typography>
                 <Typography textTransform={"capitalize"}>
-                  {type} On: {v.date}
+                  {type} On: {Date(v.date).split("GMT")[0]}
                 </Typography>
               </Box>
             </Box>
@@ -88,7 +123,12 @@ export const OrderStatusDialoge = (props) => {
                   {
                     //console.log(val)
                     val.map((v, index) => (
-                      <MenuItem value={v.type}>{v.type}</MenuItem>
+                      <MenuItem
+                        value={v.type}
+                        disabled={v.isCompleted ? true : false}
+                      >
+                        {v.type}
+                      </MenuItem>
                     ))
                   }
                   {/* <MenuItem value={1}>Ordered</MenuItem>
@@ -107,7 +147,7 @@ export const OrderStatusDialoge = (props) => {
             Discard
           </Button>
           <Button
-            onClick={props.handleClose}
+            onClick={updateOrderStatus}
             variant="contained"
             color="success"
           >

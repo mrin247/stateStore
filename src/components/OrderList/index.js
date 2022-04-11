@@ -169,34 +169,37 @@ export const OrderList = (props) => {
                     >
                       {columns.map((column) => {
                         const val = row[column.id];
-                        const tooltipTitle =
-                          location.pathname === "/products"
-                            ? "click to edit"
-                            : location.pathname === "/orders"
-                            ? "Change Status"
-                            : column.id;
+
                         return (
-                          <BootstrapTooltip
-                            title={tooltipTitle}
-                            placement="right"
-                            arrow
+                          <StyledTableCell
+                            hover
+                            button
+                            key={column.id}
+                            align={column.align}
                           >
-                            <StyledTableCell
-                              hover
-                              button
-                              key={column.id}
-                              align={column.align}
-                            >
-                              {column.id === "orderStatus" ? (
-                                <>
-                                  {val.map((v) =>
-                                    v.isCompleted ? (
-                                      <>
-                                        <Button
-                                          onClick={handleClickOpen}
-                                          variant="contained"
-                                          sx={{
-                                            color: "whitesmoke",
+                            {column.id === "orderStatus" &&
+                            column.label === "Order Status" ? (
+                              <>
+                                {val.map((v, index) =>
+                                  v.isCompleted &&
+                                  (index + 1 < 4
+                                    ? val[index + 1].isCompleted === false
+                                    : false || v.type === "delivered") ? (
+                                    <>
+                                      <Button
+                                        onClick={handleClickOpen}
+                                        variant="contained"
+                                        sx={{
+                                          color: "whitesmoke",
+                                          backgroundColor:
+                                            v.type === "delivered"
+                                              ? "green"
+                                              : v.type === "shipped"
+                                              ? "orange"
+                                              : v.type === "packed"
+                                              ? "violet"
+                                              : "blue",
+                                          "&:hover": {
                                             backgroundColor:
                                               v.type === "delivered"
                                                 ? "green"
@@ -205,71 +208,35 @@ export const OrderList = (props) => {
                                                 : v.type === "packed"
                                                 ? "violet"
                                                 : "blue",
-                                            "&:hover": {
-                                              backgroundColor:
-                                                v.type === "delivered"
-                                                  ? "green"
-                                                  : v.type === "shipped"
-                                                  ? "orange"
-                                                  : v.type === "packed"
-                                                  ? "violet"
-                                                  : "blue",
-                                            },
-                                          }}
-                                        >
-                                          {v.type}
-                                        </Button>
-                                        <OrderStatusDialoge
-                                          open={open}
-                                          handleClose={handleClose}
-                                          value={val}
-                                          status={v}
-                                          order={row}
-                                        />
-                                      </>
-                                    ) : null
-                                  )}
-                                </>
-                              ) : // <FormControl fullWidth>
-                              //   <Select
-                              //     labelId="demo-simple-select-label"
-                              //     id="demo-simple-select"
-                              //     value={age}
-                              //     onChange={handleChange}
-                              //     sx={{
-                              //       color: "whitesmoke",
-                              //       border: "1px solid whitesmoke",
-                              //       backgroundColor:
-                              //         age === 3
-                              //           ? "green"
-                              //           : age === 2
-                              //           ? "orange"
-                              //           : age === 1
-                              //           ? "violet"
-                              //           : "blue",
-                              //     }}
-                              //   >
-                              //     {
-                              //       //console.log(val)
-                              //       val.map((v,index) => (<MenuItem value={index}>
-                              //         {v.type}
-                              //       </MenuItem>)
-
-                              //       )
-                              //     }
-                              //     {/* <MenuItem value={1}>Ordered</MenuItem>
-                              //     <MenuItem value={2}>Packed</MenuItem>
-                              //     <MenuItem value={3}>Shipped</MenuItem>
-                              //     <MenuItem value={4}>Delivered</MenuItem> */}
-                              //   </Select>
-                              // </FormControl>
-                              column.format ? (
-                                column.format(val)
-                              ) : (
-                                val
-                              )}
-                            </StyledTableCell>
-                          </BootstrapTooltip>
+                                          },
+                                        }}
+                                      >
+                                        {v.type}
+                                      </Button>
+                                      <OrderStatusDialoge
+                                        open={open}
+                                        handleClose={handleClose}
+                                        value={val}
+                                        status={v}
+                                        statusIndex={index}
+                                        order={row}
+                                      />
+                                    </>
+                                  ) : null
+                                )}
+                              </>
+                            ) : column.id === "orderStatus" &&
+                              column.label === "Ordered At" ? (
+                              column.format(val[0].date)
+                            ) : // <Typography>
+                            //   {val[0].date}
+                            // </Typography>
+                            column.format ? (
+                              column.format(val)
+                            ) : (
+                              val
+                            )}
+                          </StyledTableCell>
                         );
                       })}
                     </StyledTableRow>

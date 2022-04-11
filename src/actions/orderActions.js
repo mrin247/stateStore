@@ -31,3 +31,35 @@ export const getOrders = () => {
     }
   };
 };
+
+export const updateOrder = (updatedOrder) => {
+  return async (dispatch) => {
+    let res;
+    console.log("from action", updatedOrder);
+    try {
+      dispatch({ type: orderConstants.UPDATE_ORDER_REQUEST });
+      res = await axios.post("/store/order/updateorder", updatedOrder);
+      if (res.status === 200) {
+        const order = res.data;
+        console.log(order);
+        dispatch({
+          type: orderConstants.UPDATE_ORDER_SUCCESS,
+          payload: { order: order },
+        });
+      } else {
+        const { error } = res.data;
+        console.log(error);
+        dispatch({
+          type: orderConstants.UPDATE_ORDER_FAILURE,
+          payload: { error },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: orderConstants.UPDATE_ORDER_FAILURE,
+        payload: { error },
+      });
+    }
+  };
+};
