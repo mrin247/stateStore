@@ -22,7 +22,7 @@
 ### Product Detail Page [After clicking product row]
 1. Update button update data
 2. Delete button to delete product
-3. Camera button add photos and shows on the page
+3. Camera button add photos and shows on the page and saves on the AWS
 ![image](https://user-images.githubusercontent.com/72962881/162984959-497a657d-9a2b-4bd6-a41c-1259751c74f8.png)
 
 ### Create Product Modal [after clicking create product]
