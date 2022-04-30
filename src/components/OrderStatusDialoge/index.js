@@ -83,7 +83,10 @@ export const OrderStatusDialoge = (props) => {
               <Typography> Price : {order.payablePrice}</Typography>
 
               <Box mt={3}>
-                <Typography> Created At : {Date(order.orderStatus[0].date).split("GMT")[0]}</Typography>
+                <Typography>
+                  {" "}
+                  Created At : {Date(order.orderStatus[0].date).split("GMT")[0]}
+                </Typography>
                 <Typography textTransform={"capitalize"}>
                   {type} On: {Date(v.date).split("GMT")[0]}
                 </Typography>

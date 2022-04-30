@@ -72,6 +72,15 @@ const ColorButton = styled(Button)(({ theme }) => ({
 export const OrderList = (props) => {
   const [open, setOpen] = React.useState(false);
 
+  const [toUpdateStatus, setToUpdateStatus] = React.useState();
+
+  const openStatusDialoge = (val, v, row) => {
+    setOpen(true);
+    console.log(val, v, row);
+
+    setToUpdateStatus({ val, v, row });
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -117,20 +126,6 @@ export const OrderList = (props) => {
             </Typography>
           </Box>
         </Grid>
-        {location.pathname === "/products" ? (
-          <Grid item xs={3}>
-            <ColorButton
-              variant="contained"
-              fullWidth
-              startIcon={<AddIcon />}
-              //onClick={handleOpen}
-              onClose={handleClose}
-            >
-              Create Product
-            </ColorButton>
-            <ProductModal open={open} onClose={() => handleClose()} />
-          </Grid>
-        ) : null}
       </Grid>
       <TableContainer
         sx={{
@@ -187,7 +182,9 @@ export const OrderList = (props) => {
                                     : false || v.type === "delivered") ? (
                                     <>
                                       <Button
-                                        onClick={handleClickOpen}
+                                        onClick={() =>
+                                          openStatusDialoge(val, v, row)
+                                        }
                                         variant="contained"
                                         sx={{
                                           color: "whitesmoke",
@@ -213,14 +210,6 @@ export const OrderList = (props) => {
                                       >
                                         {v.type}
                                       </Button>
-                                      <OrderStatusDialoge
-                                        open={open}
-                                        handleClose={handleClose}
-                                        value={val}
-                                        status={v}
-                                        statusIndex={index}
-                                        order={row}
-                                      />
                                     </>
                                   ) : null
                                 )}
@@ -256,6 +245,16 @@ export const OrderList = (props) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      {open ? (
+        <OrderStatusDialoge
+          open={open}
+          handleClose={handleClose}
+          value={toUpdateStatus.val}
+          status={toUpdateStatus.v}
+          //statusIndex={index}
+          order={toUpdateStatus.row}
+        />
+      ) : null}
     </Container>
   );
 };
