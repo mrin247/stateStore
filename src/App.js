@@ -12,6 +12,7 @@ import { isUserLoggedIn } from "./actions/authActions";
 import { ForgotPassword } from "./containers/forgotPassword";
 import { ResetPassword } from "./containers/resetPassword";
 import { Product } from "./containers/product";
+import { AccountSettings } from "./containers/Account";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,10 +42,18 @@ function App() {
             <Route exact path="/orders" element={<Orders />} />
           </Route>
 
+          <Route exact path="/account" element={<PrivateRoute />}>
+            <Route exact path="/account" element={<AccountSettings />} />
+          </Route>
+
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/signin" element={<Signin />} />
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
-          <Route exact path="/reset-password/:resetToken" element={<ResetPassword />} />
+          <Route
+            exact
+            path="/reset-password/:resetToken"
+            element={<ResetPassword />}
+          />
         </Routes>
       </Fragment>
     </Router>
