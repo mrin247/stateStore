@@ -134,7 +134,6 @@ export const EditProduct = (props) => {
       }
       dispatch(updateProduct(form, productId));
       navigate("/products");
-      window.location.reload();
     }
   };
 
